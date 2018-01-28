@@ -1,17 +1,12 @@
 package sample;
 
 
-import com.assist.CancelOrder;
-import com.assist.Trade;
-import com.assist.TradeApi;
+
 import data.PrivateData;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Controller {
 
@@ -23,9 +18,8 @@ public class Controller {
     @FXML private TextField amount_sell;
     @FXML private TextField my_rate_sell;
 
-    //Для хранения id идентификаторов последних ордеров.
-    private String id_last_order_buy;
-    private String id_last_order_sell;
+    @FXML private ComboBox choice_percent;
+
 
     // Формирует ордер покупки монеты
     // по цене указаной в поле my_rate_buy, и кол-ву в my_amount_buy
@@ -35,45 +29,10 @@ public class Controller {
         String amount = amount_buy.getText();
         String rate = my_rate_buy.getText();
 
-        try {
-
-            //buy - true, sell - false
-            Trade result = Main.tradeApi.extendedTrade(pair, true, rate, amount);
-
-            //Если ордер создан уведомляю
-            if(result.isSuccess()){
-                id_last_order_buy = result.getOrder_id();
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-                alert.setTitle("Всё прошло хорошо!!");
-                alert.setHeaderText(null);
-                alert.setContentText("    Ордер создан");
-
-                alert.showAndWait();
-
-            } else {
-
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-
-                alert.setTitle("Что то не так");
-                alert.setHeaderText(null);
-                alert.setContentText("   Ордер не создан \r\n" + result.toString().substring(13));
+        VisualTrade visualTrade = new VisualTrade();
+        visualTrade.buy(pair, amount, rate);
 
 
-                alert.showAndWait();
-            }
-
-        }catch (Exception e){
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-
-            alert.setTitle("Что то не так");
-            alert.setHeaderText(null);
-            alert.setContentText("   Ордер не создан - ошибка клиента\n" + e.getMessage());
-
-            alert.showAndWait();
-        }
     }
 
     public void sellAtMyPrice(){
@@ -82,139 +41,32 @@ public class Controller {
         String amount = amount_sell.getText();
         String rate = my_rate_sell.getText();
 
-        try {
+        VisualTrade visualTrade = new VisualTrade();
+        visualTrade.sell(pair, amount, rate);
 
-            //buy - true, sell - false
-            Trade result = Main.tradeApi.extendedTrade(pair, false, rate, amount);
-
-            //Если ордер создан уведомляю
-            if(result.isSuccess()){
-                id_last_order_sell = result.getOrder_id();
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-                alert.setTitle("Всё прошло хорошо!!");
-                alert.setHeaderText(null);
-                alert.setContentText("    Ордер создан");
-
-                alert.showAndWait();
-
-            } else {
-
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-
-                alert.setTitle("Что то не так");
-                alert.setHeaderText(null);
-                alert.setContentText("   Ордер не создан \r\n" + result.toString().substring(13));
-
-
-                alert.showAndWait();
-            }
-
-        }catch (Exception e){
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-
-            alert.setTitle("Что то не так");
-            alert.setHeaderText(null);
-            alert.setContentText("   Ордер не создан - ошибка клиента\n" + e.getMessage());
-            alert.setWidth(400);
-
-            alert.showAndWait();
-        }
     }
 
+    //Закрывает последний ордер покупки
     public void cancelLastBuyOrder(){
-        //Если уже имеется id крайнего ордера, закрою его
-        if(id_last_order_buy != null) {
-            try {
-                List<String> stringList = new ArrayList<>();
-                stringList.add(id_last_order_buy);
-
-                Main.tradeApi.cancelFewOrders(stringList);
-
-                //Сбрасываю id крайнего ордера в памяти программы на null,
-                //что бы не путатся
-                id_last_order_buy = null;
-
-                //Традиционное окно о удачном закрытии ордера
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-                alert.setTitle("Всё прошло хорошо!!");
-                alert.setHeaderText(null);
-                alert.setContentText("    Ордер закрыт");
-
-                alert.showAndWait();
 
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            VisualTrade visualTrade = new VisualTrade();
+            visualTrade.cancelOrder(PrivateData.id_last_order_buy);
 
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-
-                alert.setTitle("Что то не так");
-                alert.setHeaderText(null);
-                alert.setContentText("   Ордер не закрыт - ошибка клиента\n" + e.getMessage());
-
-                alert.showAndWait();
-            }
-
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Что то не так");
-            alert.setHeaderText(null);
-            alert.setContentText("В памяти программы нет открытых ордеров");
-
-            alert.showAndWait();
-        }
+            //Сбрасываю id крайнего ордера в памяти программы на null,
+            //что бы не путатся
+            PrivateData.id_last_order_buy = null;
     }
 
+    // Закрывает последний ордер продажи
     public void cancelLastSellOrder(){
-        //Если уже имеется id крайнего ордера, закрою его
-        if(id_last_order_sell != null) {
-            try {
-                List<String> stringList = new ArrayList<>();
-                stringList.add(id_last_order_sell);
 
-                Main.tradeApi.cancelFewOrders(stringList);
+        VisualTrade visualTrade = new VisualTrade();
+        visualTrade.cancelOrder(PrivateData.id_last_order_sell);
 
-                //Сбрасываю id крайнего ордера в памяти программы на null,
-                //что бы не путатся
-                id_last_order_sell = null;
-
-                //Традиционное окно о удачном закрытии ордера
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-                alert.setTitle("Всё прошло хорошо!!");
-                alert.setHeaderText(null);
-                alert.setContentText("    Ордер закрыт");
-
-                alert.showAndWait();
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-
-                alert.setTitle("Что то не так");
-                alert.setHeaderText(null);
-                alert.setContentText("   Ордер не закрыт - ошибка клиента\n" + e.getMessage());
-
-                alert.showAndWait();
-            }
-
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Что то не так");
-            alert.setHeaderText(null);
-            alert.setContentText("В памяти программы нет открытых ордеров");
-
-            alert.showAndWait();
-        }
-
+        //Сбрасываю id крайнего ордера в памяти программы на null,
+        //что бы не путатся
+        PrivateData.id_last_order_sell = null;
     }
 
     // Устанавливает в поле "Продажа -> количество" все монеты имеющиеся на балансе
@@ -231,6 +83,46 @@ public class Controller {
         System.out.println(pair + balance);
 
         amount_sell.setText(balance);
+    }
+
+    // установить цену на покупку по цене
+    // самого дешёвого ордера продажи
+    public void buyAtBestOrder(){
+        String pair = choice_pair_buy.getValue().toString();
+        String rate;
+
+        VisualTrade visualTrade = new VisualTrade();
+        rate = visualTrade.bestPriceSell(pair);
+
+        my_rate_buy.setText(rate);
+
+    }
+
+    //Установить цену на покупку по текущей цене на графике -
+    // по цене последней сделки покупки
+    public void buyAtLastTrade(){
+
+        String pair = choice_pair_buy.getValue().toString();
+        String lastPrice;
+
+        VisualTrade visualTrade = new VisualTrade();
+        lastPrice = visualTrade.lastTrade(pair);
+
+        my_rate_buy.setText(lastPrice);
+    }
+
+    // Устанавливает цену продажи монеты по цене крайнего ордера моей покупки + проценты
+    public void setMyPriceWithPercent(){
+
+        //Получаю процентную надбавку
+        double percent = Double.parseDouble(choice_percent.getValue().toString());
+
+        //Получаю цену из поля цены покупки
+        double previous_price =Double.parseDouble(my_rate_buy.getText());
+
+        double price = previous_price + (previous_price / 100 * percent);
+
+        my_rate_sell.setText(Double.toString(price));
     }
 
 }

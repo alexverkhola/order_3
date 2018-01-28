@@ -48,17 +48,18 @@
               </font>
             </Label>
             <Button font="$x1" layoutX="82.0" layoutY="126.0" mnemonicParsing="false" prefWidth="151.0" text="На всю сумму" />
-            <Button font="$x2" layoutX="18.0" layoutY="187.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="218.0" text="Купить по текущей цене" />
-            <Button layoutX="18.0" layoutY="250.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="218.0" text="Купить по цене ордера продажи">
+            <Button layoutX="20.0" layoutY="215.0" mnemonicParsing="false" onAction="#buyAtBestOrder" prefHeight="40.0" prefWidth="218.0" text="Наименьшая цена продажи">
               <font>
-                <Font size="11.0" />
+                <Font size="13.0" fx:id="x3" />
               </font>
             </Button>
-            <Button font="$x2" layoutX="32.0" layoutY="347.0" mnemonicParsing="false" onAction="#buyAtMyPrice" prefHeight="40.0" prefWidth="184.5" text="Купить по цене" />
-            <TextField fx:id="my_rate_buy" layoutX="78.0" layoutY="405.0" prefHeight="37.0" prefWidth="93.0" />
-            <Separator layoutX="18.0" layoutY="328.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
+            <Button font="$x3" layoutX="18.0" layoutY="285.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="218.0" onAction="#buyAtLastTrade" text="Цена последней сделки" />
+            <Button font="$x2" layoutX="32.0" layoutY="402.0" mnemonicParsing="false" onAction="#buyAtMyPrice" prefHeight="40.0" prefWidth="184.5" text="Купить" />
+            <TextField fx:id="my_rate_buy" layoutX="78.0" layoutY="346.0" prefHeight="37.0" prefWidth="93.0" />
+            <Separator layoutX="18.0" layoutY="170.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
             <Button font="$x2" layoutX="13.0" layoutY="492.0" mnemonicParsing="false" onAction="#cancelLastBuyOrder" prefHeight="37.0" prefWidth="223.0" text="Отменить крайний ордер" />
-            <Separator layoutX="15.0" layoutY="460.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
+            <Separator layoutX="14.0" layoutY="460.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
+            <Label font="$x1" layoutX="104.0" layoutY="183.0" prefWidth="45.0" text="Цена" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="250.0" prefHeight="540.0" prefWidth="250.0">
@@ -78,17 +79,53 @@
             <TextField fx:id="amount_sell" layoutX="139.0" layoutY="78.0" prefHeight="26.0" prefWidth="93.0" />
             <Label font="$x2" layoutX="18.0" layoutY="130.0" text="или" />
             <Button font="$x1" layoutX="82.0" layoutY="126.0" mnemonicParsing="false" onAction="#setFullAmountSell" prefWidth="151.0" text="Все монеты" />
-            <Button layoutX="18.0" layoutY="187.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="218.0" text="Продать по последней цене">
-              <font>
-                <Font size="13.0" />
-              </font>
-            </Button>
-            <Button font="$x2" layoutX="18.0" layoutY="250.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="218.0" text="Продать по цене ордера" />
-            <Button font="$x2" layoutX="32.0" layoutY="347.0" mnemonicParsing="false" onAction="#sellAtMyPrice" prefHeight="40.0" prefWidth="184.5" text="Продать по  цене" />
-            <TextField fx:id="my_rate_sell" layoutX="78.0" layoutY="404.0" prefHeight="37.0" prefWidth="93.0" />
-            <Separator layoutX="18.0" layoutY="328.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
+            <Button font="$x3" layoutX="18.0" layoutY="215.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="218.0" text="Наибольшая цена покупки" />
+            <Button font="$x3" layoutX="17.0" layoutY="254.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="218.0" text="Цена последней сделки" />
+            <Button font="$x2" layoutX="32.0" layoutY="402.0" mnemonicParsing="false" onAction="#sellAtMyPrice" prefHeight="40.0" prefWidth="184.5" text="Продать по  цене" />
+            <TextField fx:id="my_rate_sell" layoutX="78.0" layoutY="346.0" prefHeight="37.0" prefWidth="93.0" />
             <Button font="$x2" layoutX="18.0" layoutY="491.0" mnemonicParsing="false" onAction="#cancelLastSellOrder" prefHeight="37.0" prefWidth="223.0" text="Отменить крайний ордер" />
-            <Separator layoutX="10.0" layoutY="459.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
+            <Separator layoutX="10.0" layoutY="170.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
+            <Label font="$x1" layoutX="103.0" layoutY="182.0" prefWidth="45.0" text="Цена" />
+            <Separator layoutX="14.0" layoutY="459.0" minHeight="0.9998779296875" prefHeight="1.0" prefWidth="218.0" />
+            <Button font="$x3" layoutX="18.0" layoutY="294.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="85.0" onAction="#setMyPriceWithPercent" text="Цена" />
+            <Label layoutX="110.0" layoutY="296.0" text="+">
+              <font>
+                <Font size="17.0" fx:id="x4" />
+              </font>
+            </Label>
+            <Label font="$x4" layoutX="218.0" layoutY="297.0" text="\%" />
+            <ComboBox fx:id="choice_percent" layoutX="130.0" layoutY="292.0" prefHeight="30.0" prefWidth="84.99990000000253">
+              <items>
+                <FXCollections  fx:factory="observableArrayList">
+                  <String fx:value="0.5" />
+                  <String fx:value="0.6" />
+                  <String fx:value="0.7" />
+                  <String fx:value="0.8" />
+                  <String fx:value="0.9" />
+                  <String fx:value="1" />
+                  <String fx:value="1.1" />
+                  <String fx:value="1.2" />
+                  <String fx:value="1.3" />
+                  <String fx:value="1.4" />
+                  <String fx:value="1.5" />
+                  <String fx:value="1.6" />
+                  <String fx:value="1.7" />
+                  <String fx:value="1.8" />
+                  <String fx:value="1.9" />
+                  <String fx:value="2" />
+                  <String fx:value="3" />
+                  <String fx:value="4" />
+                  <String fx:value="5" />
+                  <String fx:value="6" />
+                  <String fx:value="7" />
+                  <String fx:value="8" />
+                  <String fx:value="9" />
+                  <String fx:value="10" />
+                  <String fx:value="15" />
+                  <String fx:value="20" />
+                </FXCollections>
+              </items>
+            </ComboBox>
           </children>
         </AnchorPane>
       </items>
