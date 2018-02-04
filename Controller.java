@@ -69,18 +69,31 @@ public class Controller {
         PrivateData.id_last_order_sell = null;
     }
 
+    //Установить в поле "Покупка => кол-во" всю валюту, или монеты
+    public void setFullAmountBuy(){
+        String pair = choice_pair_buy.getValue().toString();
+        String balance;
+
+        //Обрезаю все символы, оставляю только знак второй пары
+        pair = pair.substring(4);
+
+        VisualTrade visualTrade = new VisualTrade();
+        balance = visualTrade.getBalance(pair);
+
+        amount_buy.setText(balance);
+
+    }
+
     // Устанавливает в поле "Продажа -> количество" все монеты имеющиеся на балансе
     public void setFullAmountSell(){
         String pair = choice_pair_sell.getValue().toString();
+        String balance;
 
         //Обрезаю всё после первых трёх символов
         pair = pair.substring(0, 3);
 
-        Main.tradeApi.getInfo.runMethod();
-
-        String balance = Main.tradeApi.getInfo.getBalance(pair);
-
-        System.out.println(pair + balance);
+        VisualTrade visualTrade = new VisualTrade();
+        balance = visualTrade.getBalance(pair);
 
         amount_sell.setText(balance);
     }
@@ -99,7 +112,7 @@ public class Controller {
     }
 
     //Установить цену на покупку по текущей цене на графике -
-    // по цене последней сделки покупки
+    // по цене последней сделки
     public void buyAtLastTrade(){
 
         String pair = choice_pair_buy.getValue().toString();
@@ -109,6 +122,28 @@ public class Controller {
         lastPrice = visualTrade.lastTrade(pair);
 
         my_rate_buy.setText(lastPrice);
+    }
+
+    //Установить цену продажи по текущей цене на графике -
+    // по цене последней сделки
+    public void sellAtLastTrade(){
+
+        String pair = choice_pair_sell.getValue().toString();
+        String lastPrice;
+
+        VisualTrade visualTrade = new VisualTrade();
+        lastPrice = visualTrade.lastTrade(pair);
+
+        my_rate_sell.setText(lastPrice);
+    }
+
+    //Выводит наибольшую цену покупки ( из доступных ордеров на покупку )
+    public void sellAtBestOrder(){
+        String pair = choice_pair_sell.getValue().toString();
+        VisualTrade visualTrade = new VisualTrade();
+        String rate = visualTrade.bestPriceBuy(pair);
+
+        my_rate_sell.setText(rate);
     }
 
     // Устанавливает цену продажи монеты по цене крайнего ордера моей покупки + проценты

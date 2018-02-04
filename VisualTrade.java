@@ -113,6 +113,7 @@ public class VisualTrade {
 
                 Main.tradeApi.cancelFewOrders(stringList);
 
+
                 //Традиционное окно о удачном закрытии ордера
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -186,5 +187,36 @@ public class VisualTrade {
 
         Main.tradeApi.ticker.resetParams();
         return rate;
+    }
+
+    // Получить цену наилучшего предложеня покупки
+    public String bestPriceBuy(String pair){
+
+        String rate = null;
+
+        Main.tradeApi.ticker.addPair(pair);
+        Main.tradeApi.ticker.setLimit(1);
+        Main.tradeApi.ticker.runMethod();
+
+        while (Main.tradeApi.ticker.hasNextPair()) {
+
+            Main.tradeApi.ticker.switchNextPair();
+            rate = Main.tradeApi.ticker.getCurrentSell();
+
+        }
+
+        Main.tradeApi.ticker.resetParams();
+        return rate;
+    }
+
+    public String getBalance(String pair){
+        String balance;
+
+        Main.tradeApi.getInfo.runMethod();
+        balance = Main.tradeApi.getInfo.getBalance(pair);
+        Main.tradeApi.getInfo.resetParams();
+
+        return balance;
+
     }
 }

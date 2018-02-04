@@ -47,7 +47,7 @@
                 <Font size="14.0" fx:id="x2" />
               </font>
             </Label>
-            <Button font="$x1" layoutX="82.0" layoutY="126.0" mnemonicParsing="false" prefWidth="151.0" text="На всю сумму" />
+            <Button font="$x1" layoutX="82.0" layoutY="126.0" mnemonicParsing="false" prefWidth="151.0" onAction="#setFullAmountBuy" text="На всю сумму" />
             <Button layoutX="20.0" layoutY="215.0" mnemonicParsing="false" onAction="#buyAtBestOrder" prefHeight="40.0" prefWidth="218.0" text="Наименьшая цена продажи">
               <font>
                 <Font size="13.0" fx:id="x3" />
@@ -79,7 +79,7 @@
             <TextField fx:id="amount_sell" layoutX="139.0" layoutY="78.0" prefHeight="26.0" prefWidth="93.0" />
             <Label font="$x2" layoutX="18.0" layoutY="130.0" text="или" />
             <Button font="$x1" layoutX="82.0" layoutY="126.0" mnemonicParsing="false" onAction="#setFullAmountSell" prefWidth="151.0" text="Все монеты" />
-            <Button font="$x3" layoutX="18.0" layoutY="215.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="218.0" text="Наибольшая цена покупки" />
+            <Button font="$x3" layoutX="18.0" layoutY="215.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="218.0" onAction="#sellAtBestOrder" text="Наибольшая цена покупки" />
             <Button font="$x3" layoutX="17.0" layoutY="254.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="218.0" text="Цена последней сделки" />
             <Button font="$x2" layoutX="32.0" layoutY="402.0" mnemonicParsing="false" onAction="#sellAtMyPrice" prefHeight="40.0" prefWidth="184.5" text="Продать по  цене" />
             <TextField fx:id="my_rate_sell" layoutX="78.0" layoutY="346.0" prefHeight="37.0" prefWidth="93.0" />
