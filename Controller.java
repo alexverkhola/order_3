@@ -69,7 +69,8 @@ public class Controller {
         PrivateData.id_last_order_sell = null;
     }
 
-    //Установить в поле "Покупка => кол-во" всю валюту, или монеты
+    //Установить в поле "Покупка => кол-во" кол-во монет на которые хватит ресурсов на
+    //балансе
     public void setFullAmountBuy(){
         String pair = choice_pair_buy.getValue().toString();
         String balance;
@@ -80,7 +81,12 @@ public class Controller {
         VisualTrade visualTrade = new VisualTrade();
         balance = visualTrade.getBalance(pair);
 
-        amount_buy.setText(balance);
+        double value = Double.parseDouble(balance);
+        double rate = Double.parseDouble(my_rate_buy.getText());
+
+        double amount = value / rate;
+
+        amount_buy.setText(Double.toString(amount));
 
     }
 
